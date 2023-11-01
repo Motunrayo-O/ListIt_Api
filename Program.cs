@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ builder.Services.AddCors();
 
 builder.Services.AddDbContext<HouseDbContext>(o => o.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 builder.Services.AddScoped<IHouseRepository, HouseRepository>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 
@@ -29,6 +31,37 @@ var summaries = new[]
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
-app.MapGet("/houses", (IHouseRepository repo) => repo.GetAll());
+app.MapGet("/houses", (IHouseRepository repo) => repo.GetAll()).Produces<HouseDTO[]>(StatusCodes.Status200OK);
+
+app.MapGet("/house/{houseId:int}", async (int houseId, IHouseRepository repo) =>
+{
+    var house = await repo.Get(houseId);
+    if (house == null)
+        return Results.Problem($"House with Id {houseId} not found.", statusCode: 404);
+
+    return Results.Ok(house);
+}).ProducesProblem(404).Produces<HouseDetailDTO>(StatusCodes.Status200OK);
+
+app.MapPost("/houses", async ([FromBody] HouseDetailDTO dto, IHouseRepository repo) =>
+{
+    var newHouse = await repo.Add(dto);
+    return Results.Created($"house/{newHouse.Id}", newHouse);
+}).Produces<HouseDetailDTO>(StatusCodes.Status201Created);
+
+app.MapPut("/houses", async ([FromBody] HouseDetailDTO dto, IHouseRepository repo) =>
+{
+    if (await repo.Get(dto.Id) == null)
+        return Results.Problem($"House with id {dto.Id} not found", statusCode: 404);
+    var updatedHouse = await repo.Update(dto);
+    return Results.Ok(updatedHouse);
+}).ProducesProblem(404).Produces<HouseDetailDTO>(StatusCodes.Status200OK);
+
+app.MapDelete("/houses/{houseId:int}", async (int id, IHouseRepository repo) =>
+{
+    if (await repo.Get(id) == null)
+        return Results.Problem($"House with id {id} not found", statusCode: 404);
+    await repo.Delete(id);
+    return Results.Ok();
+}).ProducesProblem(404).Produces(StatusCodes.Status200OK);
 
 app.Run();
