@@ -417,6 +417,19 @@
           }
         }
       },
+      "MiniValidation/0.9.0": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/MiniValidation.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/MiniValidation.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Mono.TextTemplating/2.2.1": {
         "type": "package",
         "dependencies": {
@@ -1512,6 +1525,22 @@
         "microsoft.openapi.nuspec"
       ]
     },
+    "MiniValidation/0.9.0": {
+      "sha512": "rSH+UX+98rz6aPNEVnFQmnYhuRYzXIBYBFVnMA9lz+amhVfGjSabj4RTZG41qaPkXCOWKGMr4AtYcoBZBqX+Ng==",
+      "type": "package",
+      "path": "minivalidation/0.9.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net6.0/MiniValidation.dll",
+        "lib/net6.0/MiniValidation.xml",
+        "lib/netstandard2.0/MiniValidation.dll",
+        "lib/netstandard2.0/MiniValidation.xml",
+        "minivalidation.0.9.0.nupkg.sha512",
+        "minivalidation.nuspec"
+      ]
+    },
     "Mono.TextTemplating/2.2.1": {
       "sha512": "KZYeKBET/2Z0gY1WlTAK7+RHTl7GSbtvTLDXEZZojUdAPqpQNDL6tHv7VUpqfX5VEOh+uRGKaZXkuD253nEOBQ==",
       "type": "package",
@@ -1857,7 +1886,8 @@
       "Microsoft.AspNetCore.OpenApi >= 7.0.7",
       "Microsoft.EntityFrameworkCore.Design >= 7.0.13",
       "Microsoft.EntityFrameworkCore.Sqlite >= 7.0.13",
-      "Swashbuckle.AspNetCore >= 6.5.0"
+      "Swashbuckle.AspNetCore >= 6.5.0",
+      "minivalidation >= 0.9.0"
     ]
   },
   "packageFolders": {
@@ -1927,6 +1957,10 @@
           "Swashbuckle.AspNetCore": {
             "target": "Package",
             "version": "[6.5.0, )"
+          },
+          "minivalidation": {
+            "target": "Package",
+            "version": "[0.9.0, )"
           }
         },
         "imports": [

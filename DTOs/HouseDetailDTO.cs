@@ -1,1 +1,3 @@
-public record HouseDetailDTO(int Id, string? Address, string? Country, int Price, string? Description, string? Photo);
+using System.ComponentModel.DataAnnotations;
+
+public record HouseDetailDTO(int Id, [property: Required] string? Address, string? Country, [property: Required]int Price, string? Description, string? Photo);
