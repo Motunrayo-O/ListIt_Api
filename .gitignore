@@ -475,3 +475,9 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+bin/Debug/net7.0/Api.dll
+bin/Debug/net7.0/Api.dll
+bin/Debug/net7.0/Api.pdb
+obj/Debug/net7.0/Api.dll
+obj/Debug/net7.0/ref/Api.dll
+.gitignore
