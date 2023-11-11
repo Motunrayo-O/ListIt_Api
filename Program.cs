@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MiniValidation;
@@ -12,6 +13,7 @@ builder.Services.AddCors();
 
 builder.Services.AddDbContext<HouseDbContext>(o => o.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 builder.Services.AddScoped<IHouseRepository, HouseRepository>();
+builder.Services.AddScoped<IBidRepository, BidRepository>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
@@ -70,5 +72,24 @@ app.MapDelete("/houses/{houseId:int}", async (int id, IHouseRepository repo) =>
     await repo.Delete(id);
     return Results.Ok();
 }).ProducesProblem(404).Produces(StatusCodes.Status200OK);
+
+app.MapGet("/house/{houseId:int}/bids", async (int houseId, IHouseRepository houseRepo, IBidRepository bidRepository) =>
+{
+    if (await houseRepo.Get(houseId) == null)
+        return Results.Problem($"House with Id ${houseId} DoesNotReturnAttribute not exist.", statusCode: 404);
+    var results = await bidRepository.GetByHouseId(houseId);
+
+    return Results.Ok(results);
+}).Produces(StatusCodes.Status200OK).ProducesProblem(StatusCodes.Status404NotFound);
+
+app.MapPost("/house/{houseId:int}/bids", async ([FromBody] BidDTO dto, int houseId, IBidRepository bidRepository) =>
+{
+    if (dto.HouseId != houseId)
+        return Results.Problem($"House Id does not match path.", statusCode: StatusCodes.Status400BadRequest);
+    if (!MiniValidator.TryValidate(dto, out var errors))
+        return Results.ValidationProblem(errors);
+    var result = await bidRepository.Add(dto);
+    return Results.Created($"/houses/{result.HouseId}/bids", result);
+}).ProducesProblem(StatusCodes.Status400BadRequest).ProducesValidationProblem().Produces<BidDTO>(StatusCodes.Status201Created);
 
 app.Run();
