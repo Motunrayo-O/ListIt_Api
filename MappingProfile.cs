@@ -8,6 +8,6 @@ public class MappingProfile : Profile
         CreateMap<HouseDetailDTO, HouseEntity>();
 
         CreateMap<BidDTO, BidEntity>();
-        CreateMap<BidDTO, BidEntity>();
+        CreateMap<BidEntity, BidDTO>();
     }
 }

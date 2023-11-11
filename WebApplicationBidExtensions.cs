@@ -7,12 +7,12 @@ public static class WebApplicationBidExtensions
     {
         app.MapGet("/house/{houseId:int}/bids", async (int houseId, IHouseRepository houseRepo, IBidRepository bidRepository) =>
         {
-     if (await houseRepo.Get(houseId) == null)
-         return Results.Problem($"House with Id ${houseId} DoesNotReturnAttribute not exist.", statusCode: 404);
-     var results = await bidRepository.GetByHouseId(houseId);
+            if (await houseRepo.Get(houseId) == null)
+                return Results.Problem($"House with Id ${houseId} DoesNotReturnAttribute not exist.", statusCode: 404);
+            var results = await bidRepository.GetByHouseId(houseId);
 
-     return Results.Ok(results);
- }).Produces(StatusCodes.Status200OK).ProducesProblem(StatusCodes.Status404NotFound);
+            return Results.Ok(results);
+        }).Produces(StatusCodes.Status200OK).ProducesProblem(StatusCodes.Status404NotFound);
 
         app.MapPost("/house/{houseId:int}/bids", async ([FromBody] BidDTO dto, int houseId, IBidRepository bidRepository) =>
         {

@@ -30,6 +30,6 @@ public class BidRepository : IBidRepository
 
     public Task<List<BidDTO>> GetByHouseId(int houseId)
     {
-        return context.Bids.Where(h => h.Id == houseId).Select(e => mapper.Map<BidDTO>(e)).ToListAsync();
+        return context.Bids.Where(bid => bid.HouseId == houseId).Select(e => mapper.Map<BidDTO>(e)).ToListAsync();
     }
 }

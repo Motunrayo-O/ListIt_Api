@@ -481,3 +481,7 @@ bin/Debug/net7.0/Api.pdb
 obj/Debug/net7.0/Api.dll
 obj/Debug/net7.0/ref/Api.dll
 .gitignore
+bin/Debug/net7.0/Api.dll
+bin/Debug/net7.0/Api.pdb
+.gitignore
+obj/Debug/net7.0/Api.pdb
